@@ -1,3 +1,5 @@
+// Copyright 2026 radium-wang
+// SPDX-License-Identifier: Apache-2.0
 import Foundation
 import ImageCaptureCore
 

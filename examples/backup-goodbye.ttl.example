@@ -1,0 +1,3 @@
+; SPDX-License-Identifier: Apache-2.0
+filecopy 'A:\Resource\Jpeg\GoodBye.jpg' 'C:\GBBACK.JPG'
+exit
