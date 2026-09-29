@@ -1,0 +1,26 @@
+# Local firmware samples and decoded images
+samples/
+*.bin
+*.squashfs
+*.zip
+
+# Camera-specific probes, SD-card files, and write scripts
+debug_probe/
+DEVELOP.MOD
+00078560.636
+GRTST.TXT
+GRPROOF_camera_result.TXT
+
+# User artwork, extracted firmware resources, and camera readbacks
+assets/
+未标题-1.jpg
+make_hasselblad_goodbye.js
+
+# Local OS/editor artifacts
+.DS_Store
+.AppleDouble
+._*
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
