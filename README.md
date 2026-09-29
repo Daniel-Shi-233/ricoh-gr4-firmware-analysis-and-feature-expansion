@@ -1,4 +1,4 @@
-# Ricoh GR IV 固件与关机画面研究
+# Ricoh GR IV Firmware Analysis and Feature Expansion
 
 记录 GR IV 固件包结构、USB/MTP 可见能力、工厂菜单线索，以及在一台自有 GR IV 上验证的关机图替换结果。研究说明和工具以中文编写。
 
@@ -16,7 +16,7 @@
 python3 tools/inspect_firmware.py /path/to/fwdc248b.bin
 ```
 
-固件样本需自行从官方来源获取，本仓库不分发。详细方法、已知限制和实机结果见[研究记录](docs/GR4_固件与关机画面研究.md)。
+固件样本需自行从官方来源获取，本仓库不分发。详细方法、已知限制和实机结果见[固件与关机画面研究](docs/firmware-and-shutdown-image-research.md)及[研究日志](docs/research-log.md)。
 
 ## 免责声明与许可
 
