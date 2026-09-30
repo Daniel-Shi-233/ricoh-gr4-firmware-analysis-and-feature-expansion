@@ -1,4 +1,4 @@
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- License: see LICENSE (earlier Apache-2.0 grants remain in force) -->
 
 # GR IV 研究日志
 

@@ -1,4 +1,4 @@
-; SPDX-License-Identifier: Apache-2.0
+; License: see LICENSE (earlier Apache-2.0 grants remain in force)
 filecopy 'C:\NEWGB.JPG' 'A:\Resource\Jpeg\GoodBye.jpg'
 filecopy 'A:\Resource\Jpeg\GoodBye.jpg' 'C:\GBREAD.JPG'
 exit

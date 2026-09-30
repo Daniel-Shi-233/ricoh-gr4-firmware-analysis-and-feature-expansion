@@ -1,4 +1,4 @@
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- License: see LICENSE (earlier Apache-2.0 grants remain in force) -->
 
 # Ricoh GR IV Firmware Analysis and Feature Expansion
 
@@ -109,4 +109,4 @@ Linux 根文件系统的 `/etc/inittab` 配置了 `ttyUSI0` 的 115200 波特率
 - 本文：固件结构、USB 调查与关机图实机结果。
 - `docs/research-log.md`：按时间整理的实验过程、结果与修订。
 
-本仓库没有固件文件、解包系统镜像、相机回读数据或 Hasselblad 商标图稿。对品牌图像的权利归相应权利人所有；本文记录的是用户自有设备上的个案实验。仓库原创代码和文档采用 Apache License 2.0；该许可证只授权本仓库贡献者有权许可的内容，不覆盖第三方固件、商标或其他权利。免责声明不是法律意见，也不能消除设备改造或再分发在特定司法辖区可能产生的责任。
+本仓库没有固件文件、解包系统镜像、相机回读数据或 Hasselblad 商标图稿。对品牌图像的权利归相应权利人所有；本文记录的是用户自有设备上的个案实验。本仓库当前版本的许可条款见 [LICENSE](../LICENSE) 和 [README](../README.md#免责声明和许可证)；截至 `a55a2c7` 的旧版本按 Apache License 2.0 发布，原授权继续有效。许可只覆盖相关权利人有权授权的内容，不覆盖第三方固件、商标或其他权利。免责声明不是法律意见，也不能消除设备改造或再分发在特定司法辖区可能产生的责任。

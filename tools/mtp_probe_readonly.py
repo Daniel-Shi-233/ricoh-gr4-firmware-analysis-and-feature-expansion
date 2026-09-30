@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 radium-wang
-# SPDX-License-Identifier: Apache-2.0
+# License: see LICENSE (earlier Apache-2.0 grants remain in force)
 """Read-only PTP/MTP probe for a USB-connected RICOH GR IV.
 
 Only GetDeviceInfo, OpenSession, GetStorageIDs, GetStorageInfo, and

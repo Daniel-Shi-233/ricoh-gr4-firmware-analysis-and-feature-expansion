@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 radium-wang
-# SPDX-License-Identifier: Apache-2.0
+# License: see LICENSE (earlier Apache-2.0 grants remain in force)
 """Create the SD-card factory-menu entry files documented for one GR IV.
 
 This writes two small files into an output directory. It does not access a

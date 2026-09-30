@@ -1,4 +1,4 @@
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- License: see LICENSE (earlier Apache-2.0 grants remain in force) -->
 
 # Ricoh GR IV Firmware Analysis and Feature Expansion
 
@@ -65,7 +65,11 @@ Obtain firmware from an official source yourself; this repository does not distr
 
 Results are from a single-camera experiment and are not guaranteed for other bodies or firmware versions. Some factory-menu items can affect camera operation.
 
-Original code and documentation in this repository are licensed under [Apache License 2.0](LICENSE), which permits use, modification, and redistribution and includes standard warranty disclaimers and liability limitations. The license does not grant rights to Ricoh, GR, or Hasselblad marks, and does not remove responsibilities under local law, product warranties, or third-party rights. See [NOTICE](NOTICE) and [Contributing](CONTRIBUTING.md). The license may not limit liability in every jurisdiction; consult a lawyer in your jurisdiction for advice about your circumstances.
+From the commit that introduces the [GR IV Project Noncommercial Source License 1.0](LICENSE), original project material released under that license may be used for personal learning, research, modification, and noncommercial redistribution. Commercial use requires prior written permission from the relevant copyright holders. This includes paid resale, paid installation or support, paid access to project features, and other use intended to generate revenue or commercial advantage. Calling a fee a donation does not change the restriction. **This is a source-available, noncommercial license, not an OSI-approved open-source license.** See the full [LICENSE](LICENSE), [NOTICE](NOTICE), and [contribution guide](CONTRIBUTING.md).
+
+Earlier revisions, through commit [`a55a2c7`](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/tree/a55a2c7), were published under [Apache License 2.0](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/blob/a55a2c7/LICENSE). Those grants cannot be revoked retroactively; previously released material remains available under Apache-2.0, including unchanged portions carried into later revisions. The new restriction applies to newly licensed material from the license-change commit onward. It cannot stop commercial reuse of the earlier Apache-2.0 version.
+
+Neither license grants rights to Ricoh, GR, or Hasselblad marks or to third-party firmware or artwork. The licenses do not remove responsibilities under local law, product warranties, or third-party rights. Warranty and liability terms may not have the same effect in every jurisdiction; seek legal advice for your circumstances.
 
 ---
 
@@ -130,4 +134,8 @@ python3 tools/inspect_firmware.py /path/to/fwdc248b.bin
 
 结果来自单台相机的实验，不保证适用于其他机身或固件。部分工厂菜单项目可能影响相机运行。
 
-本仓库原创代码和文档采用 [Apache License 2.0](LICENSE)，允许使用、修改和再分发，并包含标准的无担保和责任限制条款。许可证不授予 Ricoh、GR 或 Hasselblad 商标权，也不会免除当地法律、产品保修或第三方权利产生的责任。请见 [NOTICE](NOTICE) 和[贡献指南](CONTRIBUTING.md)。该许可证不保证在所有司法辖区都能限制责任；如需针对个人情况的法律建议，请咨询当地律师。
+自引入 [GR IV Project Noncommercial Source License 1.0](LICENSE) 的提交起，按该许可证发布的项目原创内容允许个人学习、研究、修改和非商业再分发。商业使用须事先取得相关著作权人的书面许可，包括收费转售、收费安装或支持、收费提供项目功能，以及其他以获得收入或商业利益为目的的使用。把收费称作“捐赠”不改变限制。**这是可查看源码的非商业许可证，不再是 OSI 定义下的开源许可证。** 具体条款见 [LICENSE](LICENSE)、[NOTICE](NOTICE) 和[贡献指南](CONTRIBUTING.md)。
+
+截至 [`a55a2c7`](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/tree/a55a2c7) 提交的旧版本已按 [Apache License 2.0](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/blob/a55a2c7/LICENSE) 发布；这些授权不能追溯撤销。旧版内容即使原样出现在后续版本中，原有 Apache-2.0 授权仍然有效。新限制适用于许可证切换提交起新授权的内容，无法禁止他人商业使用此前已按 Apache-2.0 发布的版本。
+
+上述许可证均不授予 Ricoh、GR 或 Hasselblad 商标及第三方固件、图稿的权利，也不会免除当地法律、产品保修或第三方权利产生的责任。无担保及责任限制条款在不同司法辖区的效力可能不同；具体情况请咨询律师。

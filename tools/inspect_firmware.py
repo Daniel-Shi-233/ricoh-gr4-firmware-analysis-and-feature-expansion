@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 radium-wang
-# SPDX-License-Identifier: Apache-2.0
+# License: see LICENSE (earlier Apache-2.0 grants remain in force)
 """Offline inspection of a GR IV firmware container.
 
 The frame decoder follows the format documented by yeahnope/gr_unpack.
