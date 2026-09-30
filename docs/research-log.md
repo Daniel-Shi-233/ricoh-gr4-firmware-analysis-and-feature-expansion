@@ -49,3 +49,42 @@
 - 加入 Apache License 2.0、NOTICE、工厂菜单入口文件生成器、JPEG 长度补齐工具及两段式备份/写入脚本模板。
 - README 说明脚本是示例，仍须由操作者执行备份、运行后读回并比较 SHA-256。不开箱附带固件、系统镜像、商标图稿或相机读回件。
 - GitHub 仓库设为公开；首页 README 提供完整英文和简体中文两套介绍与复现步骤。
+
+## 7. A7/Linux 内存映射追查
+
+- 从解包载荷中的 FDT 读出根兼容项 `milbeaut,sc2000a`，设备树 `model` 字符串为 `Socionext SC2000A EVB w/ RTOS and NETSEC`。`/cpus` 只列出 `cpu@3`，兼容项 `arm,cortex-a7`；这说明该设备树为 Linux 列出的 CPU 拓扑只有一个节点，不能单凭它判断 SoC 内其他核或处理域的运行方式。
+- `/memory/reg` 的两段区域大小为 48 MiB 与 112 MiB，合计 160 MiB。启动参数还将 `0x43000000` 起的 31 MiB 定义为 `slram0`。将 Linux 区域和这个 RAM-backed MTD 区域合看，当前设备树地址图覆盖约 191 MiB。
+- 固件命令表有 `CAP_FMem`，并含 `[DRAM] ch0: ... MB ... B` 输出格式。起初将其视为可能核验 DRAM 总量的入口；后续反汇编纠正为图像缓冲空闲内存查询，见第 9 节。MTP 只读接口没有验证出 shell 的访问路径。
+- 固件载荷开头有 `BOOTPARA` 和 `DRAMPARA` 参数块，尚未解码。故此轮能确认的是 Linux 地址图及一个可能用于精确核验的工程命令，不能确认相机 DRAM 芯片物理总量。`/proc/meminfo` 的 `MemTotal` 是可用 RAM，不等同芯片容量。
+
+## 8. Serial Input 与运行自定义程序的线索
+
+- 工厂菜单存在 `Serial Input` 项；固件还含 `EnableSerialInput`、`Serial Input is enabled!` 和 UART 接收错误日志。另一个工程命令处理路径中有 `serial` 开关及 `SerialInput` 状态输出。这些证据表明它控制某种串行输入，但尚未确定物理接口、波特率，也未验证它是否直接连到工程命令解释器。
+- 固件内的 `SHELLCMD` 区块列出约 650 个工程命令及处理地址，包括 `SYS_help`、`CAP_FMem`、等待按键事件的 `SW_wait`、屏幕测试图命令和 `lcmd`。部分命令会改写内存、复位或触发硬件测试，不能仅凭名称在实机尝试。
+- `lcmd` 的固件说明指向 `ExecLinuxCommand`，参数是命令字符串。Linux 根文件系统的 `camctld` 和 `sysmgrd` 有对应接收路径；`sysmgrd` 的 `ExecWithOutput` 调用 `popen`。因此存在把工程命令交给 Linux shell 执行的静态代码路径，但尚未证明 `Serial Input` 开关足以让量产机用户接入它，也未验证命令权限和限制。
+- Linux `/etc/inittab` 配置了 `ttyUSI0` 的 115200 波特率 getty，`/etc/rc.local` 配置了 `ttyUSI1` 的 115200 波特率。这些配置证明有串行终端设置，但不能确定工厂菜单开关对应哪个接口或外部接点。
+- 2026-09-30，请用户启用 `Serial Input`、重启并连接 USB 后，以 IORegistry 读取设备和接口。GR IV 仍为 `25fb:2123`，当前配置只见 `MTP@0`（`06/01/01`，三个端点），没有新增相机串口。MTP 的确由 `ptpcamerad` 占用，但释放这个占用不会增加 USB 串口。本轮只读取枚举信息，没有发送工程命令；开关状态由用户设置，未命令读回。
+- 相机内置 TTL 脚本解释器含 `filecopy`、`while`、`random`、`messagebox`、`sendln`、`execcmnd` 等命令。在已找到的命令表中没有直接绘制 LCD、读取按键或启动任意本机可执行文件的条目。`execcmnd` 在上游 Tera Term 中执行一条 TTL 语句；相机内实现仍需独立验证。
+- 从硬件性能看，简单 2D 游戏的计算量并非主要障碍。`lcmd` 提供了一个潜在的 Linux 程序启动入口，但要做能在相机屏幕上运行、用机身按键操控的游戏，还需确认命令入口可达、自有程序可加载、显示和按键接口可用，以及安全退出方式；这些尚未通过实机验证。
+
+## 9. RAM 容量交叉核对与 CAP_FMem 纠正（2026-09-30）
+
+- 重新读取 FDT，确认 `/memory/reg` 为 `40000000 03000000 44f00000 07000000`，即 48 MiB + 112 MiB。这是 Linux 映射，不能作为整机物理容量。
+- 反汇编 `CAP_FMem`：`0x530430cc → 0x538cee54 → 内存池 14 的虚方法`。对应源文件为 `ImageBufferAllocator.cpp`，断言名称 `FreeMemorySize`，故该命令查询图像缓冲空闲内存，不是硬件总量。这纠正了前一轮的候选入口推测。
+- 查阅 [TechanaLye 的 GR IV 拆解文章](https://eetimes.itmedia.co.jp/ee/articles/2605/27/news008_2.html)并放大图 3，可见芯片丝印 `NT6CL256T64AJ-H1`。与[南亚原厂该型号规格](https://www.nanya.com/cn/Product/4497/NT6CL256T64AJ-H1)核对，容量为 16Gb，即 2 GiB，类型 LPDDR3，封装 256-ball PoP。
+- 拆解图的“256MB”文字标注与芯片原厂规格冲突，记录该冲突并采用型号对应的原厂容量。结论针对公开拆解样机；用户相机尚未读回运行时物理容量，也未确认全部容量是否启用、各处理域如何分配。
+- 本轮仅做离线固件分析和公开资料核对，没有向相机发送工程命令或写入数据。
+
+
+### 2026-09-30：Camera Mode / Debug 消费者追踪
+
+- 修正早期只追到设置端的不足：确认运行时更新接收者为公共属性管理器 `ComPropIf`，属性 ID `0x0E` 对应公共属性 `+0x5F`。
+- 根据启动搬运代码恢复可写函数表的 ROM 来源，避免将 `0x55000000` 区域错误按代码基址换算。
+- 找到模式文字、两段/四段版本显示，以及 Debug 条件下的限时四按键工程菜单入口；后者通向 `DevelopmentMenuController`，还受首次进入标志限制。
+- 本轮仅离线分析，未写相机或 SD 卡；未把内部按键 ID 猜译为物理按钮，也未把版本显示格式当成升级器的比较规则。证据见 [Debug 模式消费者追踪](gr4-debug-mode-analysis.md)。
+
+- 继续追踪开机分派：`Startup : Version` 对应开机代码 **4**，将页面模型状态置为 **2**，再发送页面 ID `0x0100000E`，由 `FactoryEntranceController` 绘制版本号。此前把页面模型状态 2 误当开机代码，已更正；也不能将此页与普通设置里的“版本信息”混为一谈。
+- 从键盘初始化表恢复两组限时入口的实体键：回放→回放→DISP→MENU，及下→左→Fn/删除→MENU。实机进入条件和两组入口的子页面仍待观察。
+- 用户实测修正：Debug 开启时，普通“相机信息”、关机信息都没有四段版本号；SD 卡放官网固件后 MENU+电源也没有进入 `Startup : Version`，无卡 MENU+电源则正常开机。此前把 MENU+电源/无卡启动与该页面相连的建议不成立。官方 MENU+电源步骤是固件更新流程，和内部 Version 页不是同一入口。隐藏的四按键序列只在 Version 页已打开时才相关。
+- 进一步静态追踪完整链：开关监控表第 9 项的 ID `0x21600221` 在前端按键表中叫 `RDIAL Push`；它的启动快照字节 `+9` 为 1、启动原因值为 1 时，`0x53A7AE80` 选开机代码 4。该原因值若未按后拨轮则选代码 1，在接收端显示 `Startup : Playback`，所以不能把它直接认作电源键启动。代码经 `0x26409E06` 消息到 `0x5325CEE8`，选择 `Startup : Version`。官方部件图将该键所在部件标为 `ADJ./Rear e-dial`。先前提出“后拨轮＋电源”时漏看相邻 Playback 分支，已撤回。
+- 用户在 Camera Mode=Debug 下实测：**关机后按住 ADJ./后拨轮向内按压，再用回放键开机**，出现 `Version` 页面，显示四段版本号。具体四段数字未取得，故不填写本机版本数值。本次无固件更新、系统写入或其他菜单更改。
