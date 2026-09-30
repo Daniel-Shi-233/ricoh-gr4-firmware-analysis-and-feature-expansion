@@ -24,3 +24,10 @@ make_hasselblad_goodbye.js
 .vscode/
 __pycache__/
 *.py[cod]
+
+# Shutdown image backups, user replacements, and verification readbacks
+GBBACK.JPG
+NEWGB.JPG
+NEWGB_READY.JPG
+GBREAD.JPG
+GBREST.JPG

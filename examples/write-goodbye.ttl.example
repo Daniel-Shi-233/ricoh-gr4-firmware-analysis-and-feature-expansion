@@ -1,4 +1,20 @@
 ; License: see LICENSE (earlier Apache-2.0 grants remain in force)
+; Run backup-goodbye first and verify GBBACK.JPG on a computer.
+; Existence alone does not prove a complete or original backup.
+filesearch 'C:\GBBACK.JPG'
+if result = 0 then
+    exit
+endif
+filesearch 'C:\NEWGB.JPG'
+if result = 0 then
+    exit
+endif
+; Preserve previous readback and avoid accidental repeated startup writes.
+; Archive/remove GBREAD.JPG on a computer before a new write attempt.
+filesearch 'C:\GBREAD.JPG'
+if result = 1 then
+    exit
+endif
 filecopy 'C:\NEWGB.JPG' 'A:\Resource\Jpeg\GoodBye.jpg'
 filecopy 'A:\Resource\Jpeg\GoodBye.jpg' 'C:\GBREAD.JPG'
 exit

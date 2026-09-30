@@ -1,0 +1,15 @@
+; License: see LICENSE (earlier Apache-2.0 grants remain in force)
+; Verify GBBACK.JPG is your original backup before running this script.
+filesearch 'C:\GBBACK.JPG'
+if result = 0 then
+    exit
+endif
+; Archive/remove GBREST.JPG on a computer before a new restore attempt.
+filesearch 'C:\GBREST.JPG'
+if result = 1 then
+    exit
+endif
+filecopy 'C:\GBBACK.JPG' 'A:\Resource\Jpeg\GoodBye.jpg'
+filecopy 'A:\Resource\Jpeg\GoodBye.jpg' 'C:\GBREST.JPG'
+; Compare GBBACK.JPG and GBREST.JPG SHA-256 on a computer.
+exit

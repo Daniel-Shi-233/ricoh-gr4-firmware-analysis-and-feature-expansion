@@ -51,7 +51,15 @@ Read [the research report](docs/firmware-and-shutdown-image-research.md) and [th
 
    If the hashes differ or the image does not display, stop and restore the backup. After a successful check, delete `script/startup.ttl`, set Script back to Disable through the factory menu, and confirm the image remains after a normal power cycle. You may then remove the entry files.
 
-The TTL templates do not perform automatic error handling or hash verification. The operator must check the backup and readback. Do not experiment with unknown factory-menu items.
+The backup script preserves an existing `GBBACK.JPG`; repeated startup cannot replace it with the modified image. The write script refuses to run without `GBBACK.JPG` or `NEWGB.JPG`, or when `GBREAD.JPG` already exists. Before another write attempt, archive the previous readback on your computer and remove only `GBREAD.JPG` from the card. Keep `GBBACK.JPG` throughout the process. These guards check existence only, not integrity or provenance; verify the backup opens and retain a second copy on your computer before writing. Copy failures still require manual inspection and SHA-256 verification. The new guards and restore script have been tested in an offline model, **not on a camera**; the earlier copy workflow was tested on one camera. Do not experiment with unknown factory-menu items.
+
+### Restore the original shutdown image
+
+With the card connected to your computer, confirm that `GBBACK.JPG` is the original backup from this camera and opens correctly. Archive any old `GBREST.JPG` and remove it from the card. Copy `examples/restore-goodbye.ttl.example` to `script/startup.ttl`. With Script enabled, safely eject the card, reinstall it, start the camera normally once, then turn it off. The script restores `GBBACK.JPG` to `A:\Resource\Jpeg\GoodBye.jpg` and reads it back to `GBREST.JPG`; it exits without writing if the backup is missing or that readback already exists.
+
+Reconnect the card and run `shasum -a 256 GBBACK.JPG GBREST.JPG`. Both files must exist and their hashes must match. Check the shutdown image, remove `script/startup.ttl`, and set Script back to Disable. Retain the backup on your computer. If the replacement was longer than the backup, restoration may leave trailing bytes: do not treat a mismatched readback as success or pad/modify the original backup to hide the mismatch.
+
+If the camera image was already overwritten without a backup, this feature cannot recover the lost original. A backup taken now contains the current image, not the factory image. Look for a prior SD-card/computer backup; do not assume a firmware update restores it. This repository does not distribute original camera artwork.
 
 ### Inspect a firmware package
 
@@ -120,7 +128,15 @@ Neither license grants rights to Ricoh, GR, or Hasselblad marks or to third-part
 
    如果哈希不同或图像无法显示，停止后续操作并用备份恢复。确认成功后删除 `script/startup.ttl`，再通过工厂菜单把 Script 设回 Disable。正常开关机确认图像仍显示后，可移除入口文件。
 
-TTL 模板没有自动错误处理或哈希校验，操作者必须检查备份和读回文件。不要试验用途不明的工厂菜单项目。
+备份脚本发现已有 `GBBACK.JPG` 就退出，避免重复开机把原图备份覆盖成修改后的图片。写入脚本在缺少 `GBBACK.JPG`、缺少 `NEWGB.JPG` 或已有 `GBREAD.JPG` 时退出。再次写入前，先在电脑上归档旧读回文件，再仅删除卡上的 `GBREAD.JPG`，始终保留 `GBBACK.JPG`。这些保护只检查文件是否存在，不能证明备份完整或确实是原图；写入前必须确认备份可打开，并在电脑上另存一份。复制失败仍需人工检查，SHA-256 校验仍在电脑上完成。新增保护和恢复脚本仅通过离线模型测试，**尚未在相机上验证**；此前复制流程在一台相机上实测过。不要试验用途不明的工厂菜单项目。
+
+### 恢复原始关机图片
+
+将 SD 卡接入电脑，确认 `GBBACK.JPG` 是这台相机修改前的原图备份且可正常打开。若卡上已有 `GBREST.JPG`，先归档到电脑并从卡上删除。将 `examples/restore-goodbye.ttl.example` 复制为 `script/startup.ttl`。保持 Script 为 Enable，安全弹出卡并装回相机，正常开机一次再关机。脚本把 `GBBACK.JPG` 写回 `A:\Resource\Jpeg\GoodBye.jpg`，再读回为 `GBREST.JPG`；没有备份或已有该读回文件时，不执行写入。
+
+把卡接回电脑，执行 `shasum -a 256 GBBACK.JPG GBREST.JPG`，确认两个文件都存在且哈希一致。检查关机图显示后，删除 `script/startup.ttl` 并把 Script 设回 Disable，电脑上的原图备份继续保留。如果替换图比原图更长，恢复时可能残留尾部字节；读回哈希不同就不能视为成功，也不要修改或填充原始备份来掩盖差异。
+
+如果此前已经覆盖机内图片且没有备份，新功能无法找回丢失的原图。此时再备份得到的是当前图片，并非出厂原图。请先查找旧 SD 卡或电脑上的备份；不能假设升级固件会恢复原图。本仓库不分发相机原始图稿。
 
 ### 检查固件包
 

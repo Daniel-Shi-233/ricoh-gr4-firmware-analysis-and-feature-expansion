@@ -1,3 +1,13 @@
 ; License: see LICENSE (earlier Apache-2.0 grants remain in force)
+; Preserve the first backup, including on repeated startup.
+filesearch 'C:\GBBACK.JPG'
+if result = 1 then
+    exit
+endif
+filesearch 'A:\Resource\Jpeg\GoodBye.jpg'
+if result = 0 then
+    exit
+endif
 filecopy 'A:\Resource\Jpeg\GoodBye.jpg' 'C:\GBBACK.JPG'
+; Check the image on a computer and save a second copy before writing.
 exit
