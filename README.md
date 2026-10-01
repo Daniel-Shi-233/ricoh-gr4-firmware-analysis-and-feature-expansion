@@ -12,6 +12,8 @@ It includes example files to reproduce the factory-menu entry and shutdown-image
 
 ### Tools and examples
 
+**GR IIIx Urban Edition 1.60:** a separate [verified shutdown-image report and procedure](docs/gr3x-urban-160-shutdown-image.md) documents one successful camera test. It uses `B:` paths, `00078490.609`, an exact-size JPEG encoder and a two-step TTL generator with computer readback verification. Follow that model-specific report rather than the GR IV steps below. `tools/create_factory_entry.py --model gr3x-urban-160` selects its entry files; the default remains GR IV.
+
 - `tools/inspect_firmware.py`: inspect a local firmware container and optionally decode its payload for offline analysis.
 - `tools/mtp_probe_readonly.py`: query MTP device, storage, and object information. It has no upload or delete operation. Requires Python 3 and PyUSB (`python3 -m pip install pyusb`).
 - `tools/ic_probe_readonly.swift`: enumerate camera devices with macOS ImageCaptureCore.
@@ -88,6 +90,8 @@ Neither license grants rights to Ricoh, GR, or Hasselblad marks or to third-part
 项目提供复现工厂菜单入口和关机图替换的示例文件，但不分发相机固件、解包后的系统文件、相机读回数据或品牌图稿。流程只在一台 GR IV 上验证，不能保证适用于其他机身或固件。改机存在数据丢失或设备故障风险；请备份原文件并逐步核对。
 
 ### 工具和示例
+
+**GR IIIx Urban Edition 1.60：**新增[关机图替换实测报告与完整流程](docs/gr3x-urban-160-shutdown-image.md)，记录一台机身的成功结果，提供等长 JPEG 编码、两阶段 TTL 生成和电脑完整读回校验工具。它使用 `B:` 路径和 `00078490.609`，请按该机型报告操作。`tools/create_factory_entry.py --model gr3x-urban-160` 生成对应入口，默认仍为 GR IV；下方 GR IV 步骤不能直接用于 GR IIIx。
 
 - `tools/inspect_firmware.py`：检查本地固件包，也可选解码载荷供离线分析。
 - `tools/mtp_probe_readonly.py`：查询 MTP 设备、存储和对象信息，不提供上传或删除操作。依赖 Python 3 与 PyUSB（`python3 -m pip install pyusb`）。
