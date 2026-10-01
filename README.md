@@ -159,3 +159,7 @@ python3 tools/inspect_firmware.py /path/to/fwdc248b.bin
 截至 [`a55a2c7`](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/tree/a55a2c7) 提交的旧版本已按 [Apache License 2.0](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/blob/a55a2c7/LICENSE) 发布；这些授权不能追溯撤销。旧版内容即使原样出现在后续版本中，原有 Apache-2.0 授权仍然有效。新限制适用于许可证切换提交起新授权的内容，无法禁止他人商业使用此前已按 Apache-2.0 发布的版本。
 
 上述许可证均不授予 Ricoh、GR 或 Hasselblad 商标及第三方固件、图稿的权利，也不会免除当地法律、产品保修或第三方权利产生的责任。无担保及责任限制条款在不同司法辖区的效力可能不同；具体情况请咨询律师。
+
+### GR IV family model identification
+
+See [read-only model identification](docs/gr4-model-identification.md) for Standard, HDF and Monochrome detection and their distinct shutdown targets. The optional example only reports a model label; existing goodbye templates remain Standard-specific.
