@@ -31,3 +31,11 @@ NEWGB.JPG
 NEWGB_READY.JPG
 GBREAD.JPG
 GBREST.JPG
+
+# Local GR IIIx inputs and generated scripts contain private artwork/readbacks
+gr3x-urban-local/
+00078490.609
+URBANBK.JPG
+GR3XGB.JPG
+URB*.JPG
+URBLOG*.TXT
