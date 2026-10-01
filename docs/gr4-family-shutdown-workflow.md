@@ -1,5 +1,7 @@
 # Automatic GR IV / HDF / Monochrome single shutdown image
 
+[English](gr4-family-shutdown-workflow.md) · [简体中文](gr4-family-shutdown-workflow.zh-CN.md)
+
 This workflow detects the camera model automatically, backs up its shutdown image, generates a replacement package, verifies complete readbacks and prepares restoration. It installs one persistent image, **not rotation**. No firmware update is involved.
 
 ## Recommended: use the existing copy-script workflow

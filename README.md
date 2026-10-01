@@ -21,6 +21,22 @@ It includes example files to reproduce the factory-menu entry and shutdown-image
 - `tools/pad_jpeg.py`: add a JPEG COM segment to reach a target file size without changing the decoded image.
 - `examples/`: TTL templates for backing up, writing, and reading back the shutdown image.
 
+### Automatic GR IV / HDF / Monochrome workflow
+
+Use the [English guide](docs/gr4-family-shutdown-workflow.md) ([简体中文](docs/gr4-family-shutdown-workflow.zh-CN.md)) for automatic model selection with the same **copy script → start once → reconnect and verify** routine:
+
+| Step | New automatic template | Output |
+| --- | --- | --- |
+| Back up | `examples/backup-gr4-family.ttl.example` | `GBMODEL.TXT` and `GBSTD.JPG` / `GBHDF.JPG` / `GBMONO.JPG` |
+| Replace | `examples/write-gr4-family.ttl.example` | `GBREAD.JPG` |
+| Restore | `examples/restore-gr4-family.ttl.example` | `GBREST.JPG` |
+
+Copy the selected template to `script/startup.ttl`. Use your own 720×480 `NEWGB.JPG`; the original, replacement and current target must have equal byte lengths. Keep the backup and model report from the **same physical body**. Verify complete SHA-256 hashes and the visible shutdown screen. No rotation or bundled artwork is included.
+
+**Compatibility:** the original `*-goodbye.ttl.example` files, `GBBACK.JPG` workflow, factory-entry command/default and `pad_jpeg.py` are unchanged. GR IIIx Urban remains separate. Existing users do not need to migrate; do not mix old backup filenames with the new templates. The optional `gr4_shutdown.py` generator requires Python 3.10+ and Pillow for image fitting; the copy-script workflow adds no Python dependency.
+
+Identification and target paths have three-body evidence; the new combined write/restore guards are offline-tested, not fully camera-qualified. A reserved but empty readback indicates a failed/incomplete attempt, not success. See the guide before retrying. [Technical identification evidence](docs/gr4-model-identification.md).
+
 ### Reproduce the shutdown-image replacement
 
 Read [the research report](docs/firmware-and-shutdown-image-research.md) and [the research log](docs/research-log.md) first. These steps describe one tested GR IV setup and may not apply to other firmware or regional variants.
@@ -100,6 +116,22 @@ Neither license grants rights to Ricoh, GR, or Hasselblad marks or to third-part
 - `tools/pad_jpeg.py`：为 JPEG 添加 COM 段以补到目标文件长度，不改变解码图像。
 - `examples/`：备份、写入和读回关机图的 TTL 模板。
 
+### GR IV／HDF／Monochrome 自动适配流程
+
+请按[中文完整指南](docs/gr4-family-shutdown-workflow.zh-CN.md)（[English](docs/gr4-family-shutdown-workflow.md)）操作，仍沿用项目原来的 **复制脚本 → 正常开机一次 → 接回电脑校验**：
+
+| 步骤 | 新增自动适配模板 | 输出 |
+| --- | --- | --- |
+| 备份 | `examples/backup-gr4-family.ttl.example` | `GBMODEL.TXT` 和 `GBSTD.JPG`／`GBHDF.JPG`／`GBMONO.JPG` |
+| 替换 | `examples/write-gr4-family.ttl.example` | `GBREAD.JPG` |
+| 恢复 | `examples/restore-gr4-family.ttl.example` | `GBREST.JPG` |
+
+将对应模板复制为 `script/startup.ttl`。图片由用户提供，命名为 `NEWGB.JPG`，尺寸 720×480；原图、新图和当前目标文件必须字节数相同。保留**同一台机身**的原图及机型报告，校验完整 SHA-256 并检查实际关机显示。不包含图片轮换或内置图稿。
+
+**兼容原流程：**原有 `*-goodbye.ttl.example`、`GBBACK.JPG` 用法、工厂入口命令及默认机型、`pad_jpeg.py` 均未修改；GR IIIx Urban 仍按独立流程操作。旧用户无需迁移，新旧备份文件名不要混用。可选的 `gr4_shutdown.py` 图片处理生成器需要 Python 3.10+ 和 Pillow；直接复制脚本的流程没有新增 Python 依赖。
+
+三机型识别及图片路径已有真机依据；新组合的写入／恢复保护仅通过离线检查，尚未整套上机验证。脚本预留的空读回文件表示未完成或失败，不能视为成功；重试前按指南排查。[机型识别技术依据](docs/gr4-model-identification.md)。
+
 ### 复现关机图替换
 
 请先阅读[研究报告](docs/firmware-and-shutdown-image-research.md)和[研究日志](docs/research-log.md)。以下步骤只对应一台 GR IV 的实测环境，其他固件或地区版本可能不同。
@@ -159,11 +191,3 @@ python3 tools/inspect_firmware.py /path/to/fwdc248b.bin
 截至 [`a55a2c7`](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/tree/a55a2c7) 提交的旧版本已按 [Apache License 2.0](https://github.com/radium-wang/ricoh-gr4-firmware-analysis-and-feature-expansion/blob/a55a2c7/LICENSE) 发布；这些授权不能追溯撤销。旧版内容即使原样出现在后续版本中，原有 Apache-2.0 授权仍然有效。新限制适用于许可证切换提交起新授权的内容，无法禁止他人商业使用此前已按 Apache-2.0 发布的版本。
 
 上述许可证均不授予 Ricoh、GR 或 Hasselblad 商标及第三方固件、图稿的权利，也不会免除当地法律、产品保修或第三方权利产生的责任。无担保及责任限制条款在不同司法辖区的效力可能不同；具体情况请咨询律师。
-
-### GR IV family model identification
-
-See [read-only model identification](docs/gr4-model-identification.md) for Standard, HDF and Monochrome detection and their distinct shutdown targets. The optional example only reports a model label; existing goodbye templates remain Standard-specific.
-
-### Automatic single-image workflow for GR IV / HDF / Monochrome
-
-Use the [complete single-image guide](docs/gr4-family-shutdown-workflow.md): copy `backup-gr4-family.ttl.example`, `write-gr4-family.ttl.example` or `restore-gr4-family.ttl.example` to `script/startup.ttl`, just like the existing examples. The model and target are selected automatically. `tools/gr4_shutdown.py` is optional for image fitting and package verification. No rotation or bundled artwork is included. The new generated workflow is offline-tested; see the guide for physical evidence and limitations.
