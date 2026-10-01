@@ -1,0 +1,41 @@
+; License: see LICENSE (earlier Apache-2.0 grants remain in force)
+; GR IIIx Urban 1.60 only. Backup/copy primitives were tested on the camera;
+; this consolidated guard wrapper is tested offline, not as a complete camera run.
+; Verify URBANBK.JPG and URBOLD.JPG on the computer before any installation.
+; Preserve existing backups. No shutdown resource is overwritten here.
+getfileattr 'C:\URBANBK.JPG'
+if result <> -1 then
+exit
+endif
+getfileattr 'C:\URBOLD.JPG'
+if result <> -1 then
+exit
+endif
+filestat 'B:\Resource\Jpeg\GB_Urban.jpg' size
+if result <> 0 then
+exit
+endif
+if size <> 107902 then
+exit
+endif
+filecopy 'B:\Resource\Jpeg\GB_Urban.jpg' 'C:\URBANBK.JPG'
+filestat 'C:\URBANBK.JPG' size
+if result <> 0 then
+exit
+endif
+if size <> 107902 then
+exit
+endif
+getfileattr 'B:\Resource\Jpeg\RB41OL.JPG'
+if result = -1 then
+filecopy 'B:\Resource\Jpeg\GB_Urban.jpg' 'B:\Resource\Jpeg\RB41OL.JPG'
+endif
+filestat 'B:\Resource\Jpeg\RB41OL.JPG' size
+if result <> 0 then
+exit
+endif
+if size <> 107902 then
+exit
+endif
+filecopy 'B:\Resource\Jpeg\RB41OL.JPG' 'C:\URBOLD.JPG'
+exit

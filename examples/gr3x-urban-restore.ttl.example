@@ -1,0 +1,29 @@
+; License: see LICENSE (earlier Apache-2.0 grants remain in force)
+; GR IIIx Urban 1.60 only. Previously verify RB41OL.JPG through a full readback.
+; B: to B: restore was camera-tested; this guard wrapper is tested offline only.
+; Never substitute an unverified or SD-sourced backup.
+getfileattr 'C:\URBREST.JPG'
+if result <> -1 then
+exit
+endif
+filestat 'B:\Resource\Jpeg\RB41OL.JPG' size
+if result <> 0 then
+exit
+endif
+if size <> 107902 then
+exit
+endif
+filestat 'B:\Resource\Jpeg\GB_Urban.jpg' size
+if result <> 0 then
+exit
+endif
+if size <> 107902 then
+exit
+endif
+getfileattr 'B:\Resource\Jpeg\GB_Urban.jpg'
+if result <> 32 then
+exit
+endif
+filecopy 'B:\Resource\Jpeg\RB41OL.JPG' 'B:\Resource\Jpeg\GB_Urban.jpg'
+filecopy 'B:\Resource\Jpeg\GB_Urban.jpg' 'C:\URBREST.JPG'
+exit
