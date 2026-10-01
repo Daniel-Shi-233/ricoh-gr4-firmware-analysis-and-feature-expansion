@@ -1,0 +1,76 @@
+; License: see LICENSE
+; Read-only model detection candidate. No internal writes, no installation.
+model = 'UNKNOWN'
+sz = -1
+filestat 'E:\BlkCtl15.bin' sz
+if sz < 8 then
+    goto report
+endif
+fileopen fh 'E:\BlkCtl15.bin' 0
+if fh < 0 then
+    goto report
+endif
+fileread fh 1 chunk
+str2code b0 chunk
+fileread fh 1 chunk
+str2code b1 chunk
+fileread fh 1 chunk
+str2code b2 chunk
+fileread fh 1 chunk
+str2code b3 chunk
+fileread fh 1 chunk
+str2code b4 chunk
+fileread fh 1 chunk
+str2code b5 chunk
+fileread fh 1 chunk
+str2code b6 chunk
+fileread fh 1 chunk
+str2code b7 chunk
+fileclose fh
+if b0 <> 165 then
+    goto report
+endif
+if b1 <> 90 then
+    goto report
+endif
+if b2 <> 90 then
+    goto report
+endif
+if b3 <> 165 then
+    goto report
+endif
+if b4 = 224 then
+if b5 = 50 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'STANDARD'
+endif
+endif
+endif
+endif
+if b4 = 225 then
+if b5 = 50 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'HDF'
+endif
+endif
+endif
+endif
+if b4 = 48 then
+if b5 = 51 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'MONO'
+endif
+endif
+endif
+endif
+:report
+filecreate log 'C:\AUTOMOD.TXT'
+if log < 0 then
+    exit
+endif
+filewrite log model
+fileclose log
+exit
