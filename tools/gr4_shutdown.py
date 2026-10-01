@@ -169,5 +169,26 @@ def main():
         parser.exit(1, f'Error: {error}\n')
 
 
+
+def generate_simple_write(restore=False):
+    """Static card template matching the project's copy/run/readback workflow."""
+    output = 'GBREST.JPG' if restore else 'GBREAD.JPG'
+    source = 'backup' if restore else "'C:\\NEWGB.JPG'"
+    text = routing()
+    # Same-model binding only; users must keep each body's card backup separate.
+    for label in BACKUPS:
+        text += f"strcompare model '{label}'\nif result = 0 then\n"
+        text += size_gate("'C:\\GBMODEL.TXT'", len(label))
+        text += f"fileopen fh 'C:\\GBMODEL.TXT' 0\nif fh < 0 then\n    exit\nendif\nfileread fh {len(label)} saved_model\nfileclose fh\nstrcompare saved_model model\nif result <> 0 then\n    exit\nendif\nendif\n"
+    text += f"filesearch 'C:\\{output}'\nif result = 1 then\n    exit\nendif\n"
+    text += "original_size = -1\nfilestat backup original_size\nif original_size < 4 then\n    exit\nendif\nif original_size > 2097152 then\n    exit\nendif\n"
+    text += size_gate('target', 'original_size')
+    if not restore:
+        text += size_gate(source, 'original_size')
+    # An empty readback reserves this attempt before writing. It is not success.
+    text += f"filecreate fh 'C:\\{output}'\nif fh < 0 then\n    exit\nendif\nfileclose fh\n"
+    return text + f"filecopy {source} target\nfilecopy target 'C:\\{output}'\nexit\n"
+
+
 if __name__ == '__main__':
     main()

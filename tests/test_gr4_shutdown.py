@@ -100,3 +100,37 @@ class WorkflowTests(unittest.TestCase):
             bad=root/'bad.jpg';bad.write_bytes(b'x'*20000)
             with self.assertRaises(ValueError):verify(package,bad)
             with self.assertRaises(ValueError):prepare(card,image,package)
+
+
+class SimpleTemplateTests(unittest.TestCase):
+    def test_three_models_single_image_and_restore(self):
+        from tools.gr4_shutdown import generate_simple_write
+        for product,(model,target) in MODELS.items():
+            fs={r'E:\BlkCtl15.bin':struct.pack('<II',0xA55A5AA5,product),target:b'original'}
+            run(generate_backup(),fs)
+            fs[r'C:\NEWGB.JPG']=b'newimage'
+            run(generate_simple_write(),fs)
+            self.assertEqual(fs[target],b'newimage')
+            self.assertEqual(fs[r'C:\GBREAD.JPG'],b'newimage')
+            self.assertEqual(run(generate_simple_write(),fs)[1],0)
+            run(generate_simple_write(True),fs)
+            self.assertEqual(fs[target],b'original')
+            self.assertEqual(fs[r'C:\GBREST.JPG'],b'original')
+
+    def test_failed_attempt_not_retried_and_wrong_length_rejected(self):
+        from tools.gr4_shutdown import generate_simple_write
+        target=MODELS[0x132E0][1]
+        fs={r'E:\BlkCtl15.bin':struct.pack('<II',0xA55A5AA5,0x132E0),target:b'original'}
+        run(generate_backup(),fs)
+        fs[r'C:\NEWGB.JPG']=b'short'
+        self.assertEqual(run(generate_simple_write(),fs)[1],0)
+        fs[r'C:\NEWGB.JPG']=b'newimage'
+        run(generate_simple_write(),fs,1)
+        self.assertEqual(fs[target],b'original')
+        self.assertEqual(run(generate_simple_write(),fs)[1],0)
+
+    def test_checked_in_templates_match_generator(self):
+        from tools.gr4_shutdown import generate_simple_write
+        root=Path(__file__).resolve().parents[1]/'examples'
+        for phase,text in [('backup',generate_backup()),('write',generate_simple_write()),('restore',generate_simple_write(True))]:
+            self.assertEqual((root/f'{phase}-gr4-family.ttl.example').read_text(),'; License: see LICENSE\n'+text)

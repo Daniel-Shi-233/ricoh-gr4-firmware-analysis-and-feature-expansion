@@ -166,4 +166,4 @@ See [read-only model identification](docs/gr4-model-identification.md) for Stand
 
 ### Automatic single-image workflow for GR IV / HDF / Monochrome
 
-Use the [complete single-image guide](docs/gr4-family-shutdown-workflow.md) and `tools/gr4_shutdown.py` for automatic model selection, original backup, JPEG preparation, one-shot replacement, full readback verification and restoration. No rotation or bundled artwork is included. The new generated workflow is offline-tested; see the guide for physical evidence and limitations.
+Use the [complete single-image guide](docs/gr4-family-shutdown-workflow.md): copy `backup-gr4-family.ttl.example`, `write-gr4-family.ttl.example` or `restore-gr4-family.ttl.example` to `script/startup.ttl`, just like the existing examples. The model and target are selected automatically. `tools/gr4_shutdown.py` is optional for image fitting and package verification. No rotation or bundled artwork is included. The new generated workflow is offline-tested; see the guide for physical evidence and limitations.

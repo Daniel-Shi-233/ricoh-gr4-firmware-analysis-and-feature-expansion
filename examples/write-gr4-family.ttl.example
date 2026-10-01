@@ -1,0 +1,175 @@
+; License: see LICENSE
+; License: see LICENSE
+; Read-only model detection candidate. No internal writes, no installation.
+model = 'UNKNOWN'
+sz = -1
+filestat 'E:\BlkCtl15.bin' sz
+if sz < 8 then
+    goto report
+endif
+fileopen fh 'E:\BlkCtl15.bin' 0
+if fh < 0 then
+    goto report
+endif
+fileread fh 1 chunk
+str2code b0 chunk
+fileread fh 1 chunk
+str2code b1 chunk
+fileread fh 1 chunk
+str2code b2 chunk
+fileread fh 1 chunk
+str2code b3 chunk
+fileread fh 1 chunk
+str2code b4 chunk
+fileread fh 1 chunk
+str2code b5 chunk
+fileread fh 1 chunk
+str2code b6 chunk
+fileread fh 1 chunk
+str2code b7 chunk
+fileclose fh
+if b0 <> 165 then
+    goto report
+endif
+if b1 <> 90 then
+    goto report
+endif
+if b2 <> 90 then
+    goto report
+endif
+if b3 <> 165 then
+    goto report
+endif
+if b4 = 224 then
+if b5 = 50 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'STANDARD'
+endif
+endif
+endif
+endif
+if b4 = 225 then
+if b5 = 50 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'HDF'
+endif
+endif
+endif
+endif
+if b4 = 48 then
+if b5 = 51 then
+if b6 = 1 then
+if b7 = 0 then
+model = 'MONO'
+endif
+endif
+endif
+endif
+:report
+target = ''
+backup = ''
+strcompare model 'STANDARD'
+if result = 0 then
+    target = 'A:\Resource\Jpeg\GoodBye.jpg'
+    backup = 'C:\GBSTD.JPG'
+endif
+strcompare model 'HDF'
+if result = 0 then
+    target = 'A:\Resource\Jpeg\GB_HDF.jpg'
+    backup = 'C:\GBHDF.JPG'
+endif
+strcompare model 'MONO'
+if result = 0 then
+    target = 'A:\Resource\Jpeg\GB_Mono.jpg'
+    backup = 'C:\GBMONO.JPG'
+endif
+strcompare model 'UNKNOWN'
+if result = 0 then
+    exit
+endif
+strcompare model 'STANDARD'
+if result = 0 then
+sz = -1
+filestat 'C:\GBMODEL.TXT' sz
+if sz <> 8 then
+    exit
+endif
+fileopen fh 'C:\GBMODEL.TXT' 0
+if fh < 0 then
+    exit
+endif
+fileread fh 8 saved_model
+fileclose fh
+strcompare saved_model model
+if result <> 0 then
+    exit
+endif
+endif
+strcompare model 'HDF'
+if result = 0 then
+sz = -1
+filestat 'C:\GBMODEL.TXT' sz
+if sz <> 3 then
+    exit
+endif
+fileopen fh 'C:\GBMODEL.TXT' 0
+if fh < 0 then
+    exit
+endif
+fileread fh 3 saved_model
+fileclose fh
+strcompare saved_model model
+if result <> 0 then
+    exit
+endif
+endif
+strcompare model 'MONO'
+if result = 0 then
+sz = -1
+filestat 'C:\GBMODEL.TXT' sz
+if sz <> 4 then
+    exit
+endif
+fileopen fh 'C:\GBMODEL.TXT' 0
+if fh < 0 then
+    exit
+endif
+fileread fh 4 saved_model
+fileclose fh
+strcompare saved_model model
+if result <> 0 then
+    exit
+endif
+endif
+filesearch 'C:\GBREAD.JPG'
+if result = 1 then
+    exit
+endif
+original_size = -1
+filestat backup original_size
+if original_size < 4 then
+    exit
+endif
+if original_size > 2097152 then
+    exit
+endif
+sz = -1
+filestat target sz
+if sz <> original_size then
+    exit
+endif
+sz = -1
+filestat 'C:\NEWGB.JPG' sz
+if sz <> original_size then
+    exit
+endif
+filecreate fh 'C:\GBREAD.JPG'
+if fh < 0 then
+    exit
+endif
+fileclose fh
+filecopy 'C:\NEWGB.JPG' target
+filecopy target 'C:\GBREAD.JPG'
+exit
