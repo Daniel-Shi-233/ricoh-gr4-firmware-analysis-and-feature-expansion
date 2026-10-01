@@ -163,3 +163,7 @@ python3 tools/inspect_firmware.py /path/to/fwdc248b.bin
 ### GR IV family model identification
 
 See [read-only model identification](docs/gr4-model-identification.md) for Standard, HDF and Monochrome detection and their distinct shutdown targets. The optional example only reports a model label; existing goodbye templates remain Standard-specific.
+
+### Automatic single-image workflow for GR IV / HDF / Monochrome
+
+Use the [complete single-image guide](docs/gr4-family-shutdown-workflow.md) and `tools/gr4_shutdown.py` for automatic model selection, original backup, JPEG preparation, one-shot replacement, full readback verification and restoration. No rotation or bundled artwork is included. The new generated workflow is offline-tested; see the guide for physical evidence and limitations.

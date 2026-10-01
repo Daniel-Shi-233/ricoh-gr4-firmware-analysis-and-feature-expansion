@@ -14,7 +14,7 @@ With Script enabled, save any existing script/startup.ttl and copy examples/iden
 
 The example reads exactly eight bytes, one byte at a time, from E:\BlkCtl15.bin. It checks little-endian magic A55A5AA5 and an exact product allowlist. It writes only STANDARD, HDF, MONO or UNKNOWN to C:\AUTOMOD.TXT. No internal writes, installation, serial-number export, memory access or engineering commands occur. Unknown input must not select an installer. Logging failure may leave no fresh output. The backend's short-read/error reporting is imperfect; header checks are not an authenticity guarantee.
 
-`tools/gr4_model.py` exposes `identify_header(eight_bytes)` returning `(label, target_path)` or `None` for host tooling. It never contacts a camera. A dispatcher can use these exact labels to choose a separately reviewed workflow; never default UNKNOWN to Standard or overwrite all targets.
+`tools/gr4_model.py` exposes `identify_header(eight_bytes)` returning `(label, target_path)` or `None` for host tooling. It never contacts a camera. The [single-image generator](gr4-family-shutdown-workflow.md) uses these labels for model-specific backup, write and restore. Never default UNKNOWN to Standard or overwrite all targets.
 
 ## Evidence
 
